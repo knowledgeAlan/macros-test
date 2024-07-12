@@ -4,8 +4,8 @@ use syn::DeriveInput;
 
 pub(crate) fn process_enum_from(input:DeriveInput) -> TokenStream {
 
-    let ident: syn::Ident = input.ident();
-    let generics: syn::Generics = input.generics();
+    let ident: syn::Ident = input.ident;
+    let generics: syn::Generics = input.generics;
 
     let variants = match input.data  {
         syn::Data::Enum(data) => data.variants,
@@ -13,7 +13,7 @@ pub(crate) fn process_enum_from(input:DeriveInput) -> TokenStream {
     };
 
 
-    let from_imps = variants.iter().map(|variant: &syn::Variant|{
+    let from_impls = variants.iter().map(|variant: &syn::Variant|{
 
         let var:&syn::Ident = &variant.ident;
 
@@ -42,4 +42,9 @@ pub(crate) fn process_enum_from(input:DeriveInput) -> TokenStream {
          
 
     });
+
+
+    quote! {
+        #(#from_impls)*
+    }
 }
